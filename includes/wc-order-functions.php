@@ -117,6 +117,15 @@ function wc_get_orders( $args ) {
 		$wp_query_args['no_found_rows'] = true;
 	}
 
+	// Copy custom args to the WP_Query args
+	$exclude_args = array( 'status', 'type', 'parent', 'customer', 'email', 'limit', 'offset', 'page', 'exclude', 'return', 'paginate' );
+
+	foreach ( $args as $key => $value ) {
+		if ( ! isset( $wp_query_args[ $key ] ) && ! in_array( $key, $exclude_args ) ) {
+			$wp_query_args[ $key ] = $value;
+		}
+	}
+
 	// Get results.
 	$orders = new WP_Query( $wp_query_args );
 
